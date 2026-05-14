@@ -24,8 +24,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
   define: {
-    "process.env.VITE_ADMIN_PASSWORD": JSON.stringify(import.meta.env.VITE_ADMIN_PASSWORD ?? "admin123"),
-    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development"),
+    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "production"),
+    "process.env.VITE_ADMIN_PASSWORD": JSON.stringify(
+      process.env.VITE_ADMIN_PASSWORD || "admin123"
+    ),
   },
 }));
 
