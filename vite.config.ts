@@ -23,6 +23,10 @@ export default defineConfig(({ mode }) => ({
       "@shared": path.resolve(__dirname, "./shared"),
     },
   },
+  define: {
+    "process.env.VITE_ADMIN_PASSWORD": JSON.stringify(import.meta.env.VITE_ADMIN_PASSWORD ?? "admin123"),
+    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development"),
+  },
 }));
 
 function expressPlugin(): Plugin {

@@ -5,19 +5,24 @@ const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "Missing Supabase environment variables. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY or VITE_SUPABASE_PUBLISHABLE_KEY to your .env file."
-  );
+// Only create Supabase client if env vars are present
+let supabase: ReturnType<typeof createClient> | null = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 export async function fetchProjects() {
+  if (!supabase) throw new Error("Supabase not configured");
   return supabase.from("projects").select("*");
 }
 
 export async function uploadImage(file: File, bucket: string = 'images') {
+  if (!supabase) {
+    console.warn("Supabase not configured - cannot upload image");
+    return URL.createObjectURL(file);
+  }
+
   const fileExt = file.name.split('.').pop();
   const fileName = `${Date.now()}.${fileExt}`;
   const filePath = `projects/${fileName}`;
