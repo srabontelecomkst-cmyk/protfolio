@@ -1,5 +1,5 @@
 const ADMIN_AUTH_KEY = "admin-authenticated";
-const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD ?? "admin123";
+const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
 
 export function isAdminAuthenticated() {
   if (typeof window === "undefined") {
