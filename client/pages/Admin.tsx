@@ -120,13 +120,13 @@ export default function Admin() {
     setSkillCategories(next);
   };
 
-  const updateSkill = (categoryIndex: number, skillIndex: number, field: keyof ServiceData | "name" | "level", value: string) => {
+  const updateSkill = (categoryIndex: number, skillIndex: number, field: "name" | "level", value: string) => {
     const next = [...skillCategories];
     const skill = next[categoryIndex].skills[skillIndex];
     next[categoryIndex].skills[skillIndex] = {
       ...skill,
       [field]: field === "level" ? Number(value) : value,
-    } as any;
+    };
     setSkillCategories(next);
   };
 
