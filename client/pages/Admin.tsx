@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, type ReactNode, type ErrorInfo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
@@ -30,6 +30,80 @@ import {
   type SkillCategory,
   type Testimonial,
 } from "@/lib/admin-data";
+
+// Error Boundary for Admin Panel
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class AdminErrorBoundary extends React.Component<{ children: ReactNode }, ErrorBoundaryState> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Admin panel error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-[#f7dcdc] flex items-center justify-center p-8">
+          <div className="glass rounded-3xl border border-white/10 p-8 max-w-lg w-full text-center">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">Admin Panel Error</h2>
+            <p className="text-slate-700 mb-4">
+              Something went wrong. This could be due to corrupted saved data.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  try {
+                    // Clear potentially corrupted admin data
+                    const keys = [
+                      "admin-projects", "admin-services", "admin-skills", "admin-testimonials",
+                      "admin-banner-image", "admin-logo", "admin-name", "admin-site-title", "admin-favicon"
+                    ];
+                    keys.forEach(k => localStorage.removeItem(k));
+                    // Keep auth state, just reload
+                    location.reload();
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }}
+                className="w-full rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
+              >
+                Reset Admin Data & Reload
+              </button>
+              <button
+                onClick={() => {
+                  try {
+                    localStorage.removeItem("admin-authenticated");
+                  } catch { }
+                  window.location.href = "/login";
+                }}
+                className="w-full rounded-full bg-rose-500/20 px-5 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-500/30"
+              >
+                Logout & Return to Login
+              </button>
+            </div>
+            {this.state.error && (
+              <pre className="mt-4 text-xs text-left bg-black/10 p-3 rounded overflow-auto">
+                {this.state.error.message}
+              </pre>
+            )}
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const tabs = [
   { id: "projects", label: "Projects" },
@@ -159,7 +233,8 @@ export default function Admin() {
   };
 
   return (
-    <div className="bg-[#f7dcdc] min-h-screen text-slate-900">
+    <AdminErrorBoundary>
+      <div className="bg-[#f7dcdc] min-h-screen text-slate-900">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
@@ -648,5 +723,6 @@ export default function Admin() {
 
       <Footer />
     </div>
+    </AdminErrorBoundary>
   );
 }
