@@ -2,24 +2,29 @@ import path from "node:path";
 import express from "express";
 import { createServer } from "./index";
 
-// Vercel serverless function export
 const app = createServer();
 
-// In production (Vercel), serve static SPA files
+// Determine the correct path to SPA build output
 const __dirname = import.meta.dirname;
-const distPath = path.join(__dirname, "../spa");
+let spaPath = path.join(__dirname, "../spa");
 
-// Serve static files from the SPA build
-app.use(express.static(distPath));
+// Vercel stores build output in /vercel/paths
+if (process.env.VERCEL) {
+  spaPath = path.join(__dirname, "../../spa");
+}
 
-// Handle React Router - serve index.html for all non-API routes
+// Serve static files from SPA build
+app.use(express.static(spaPath));
+
+// All other routes - serve React app (API routes already defined in createServer)
 app.get("*", (req, res) => {
   if (req.path.startsWith("/api/") || req.path.startsWith("/health")) {
     return res.status(404).json({ error: "API endpoint not found" });
   }
-  res.sendFile(path.join(distPath, "index.html"));
+  res.sendFile(path.join(spaPath, "index.html"));
 });
 
-// Vercel serverless function export
 export default app;
+
+
 
