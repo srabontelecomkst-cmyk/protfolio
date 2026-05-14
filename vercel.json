@@ -1,34 +1,26 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "version": 2,
+  "framework": null,
   "builds": [
     {
       "src": "package.json",
-      "uses": "@vercel/static-build"
-    },
-    {
-      "src": "vite.config.server.ts",
-      "uses": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "buildCommand": "pnpm run build"
+      }
     }
   ],
   "routes": [
     {
+      "src": "/(assets/.*)",
+      "dest": "/dist/spa/assets/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/dist/server/node-build.mjs"
-    },
-    {
-      "src": "/(assets/.*)",
-      "dest": "/dist/spa/$1"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
     }
   ],
   "env": {
     "NODE_ENV": "production"
   }
 }
+
