@@ -1,0 +1,170 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Light mode modern portfolio theme with white and blue colors
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+  */
+  :root {
+    --background: 7 84% 92%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 217.2 91.2% 59.8%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217.2 91.2% 59.8%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.9% 10%;
+    --sidebar-primary: 217.2 91.2% 59.8%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background: #f7dcdc;
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 0%, rgba(96, 165, 250, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  pre,
+  code {
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-bold;
+  }
+
+  h1 {
+    @apply text-5xl md:text-6xl lg:text-7xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl bg-white/80 border border-blue-100 rounded-3xl text-slate-900 shadow-lg shadow-blue-100/30;
+  }
+
+  .glass-sm {
+    @apply backdrop-blur-lg bg-white/90 border border-blue-100 rounded-2xl text-slate-900;
+  }
+
+  .gradient-border {
+    @apply relative rounded-3xl;
+    background: linear-gradient(135deg, rgb(104, 146, 189), rgb(153, 72, 72), rgba(191, 219, 254, 0.25)) border-box;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .glow-effect {
+    @apply relative;
+  }
+
+  .glow-effect::before {
+    @apply absolute inset-0 rounded-3xl blur-xl -z-10 opacity-75;
+    background: linear-gradient(135deg, rgba(80, 69, 90, 0.986), rgba(6, 182, 212, 0.6));
+  }
+
+  .btn-glow {
+    @apply relative px-8 py-3 rounded-full font-semibold transition-all duration-300 text-white;
+    background: linear-gradient(135deg, #2563EB, #22D3EE);
+    box-shadow: 0 10px 30px rgb(72, 110, 168);
+  }
+
+  .btn-glow:hover {
+    @apply scale-105;
+    box-shadow: 0 15px 35px rgb(43, 37, 37), 0 0 50px rgba(136, 217, 230, 0.25);
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-[#7C3AED] via-[#3B82F6] to-[#06B6D4] bg-clip-text text-transparent;
+  }
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32;
+  }
+
+  .nav-active {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-[#7C3AED] to-[#06B6D4];
+  }
+
+  .animated-bg {
+    @apply relative overflow-hidden;
+  }
+
+  .blur-line {
+    @apply absolute h-32 blur-3xl -z-10 opacity-40;
+  }
+}
